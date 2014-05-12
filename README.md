@@ -1,4 +1,4 @@
 pnl
 ===
 
-Métodos em programação nã-linear
+Métodos em programação não-linear

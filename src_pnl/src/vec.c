@@ -1,13 +1,13 @@
 #include "pnl.h"
 
 Vec *vec_new(PnlInt n){
-	Vec *x = PnlMalloc(1,sizeof(Vec));
-	x->x = PnlMalloc(n,sizeof(PnlScalar));
+	Vec *x = pnl_malloc(1,sizeof(Vec));
+	x->x = pnl_malloc(n,sizeof(PnlScalar));
 	return x;
 }
 
 void *vec_free(Vec *x){
-	PnlFree(x->x);
-	PnlFree(x);
+	pnl_free(x->x);
+	pnl_free(x);
 	return NULL;
 }

@@ -5,8 +5,8 @@
 
 #define PnlInt int
 #define PnlScalar double
-#define PnlMalloc(a,b) (malloc(a*sizeof(b)))
-#define PnlFree(a) (free(a))
+#define pnl_malloc(a,b) (malloc(a*sizeof(b)))
+#define pnl_free(a) (free(a))
 
 typedef struct{
 	PnlInt n;

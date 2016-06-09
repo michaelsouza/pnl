@@ -1,6 +1,43 @@
 ## module goldSearch
 import numpy as np
 
+def newton_raphson(f, x,tol=1.0e-9,gradobj=False,verbose=False):
+  if verbose:
+    print 'Init -------'
+    print 'x    = ', x
+    print 'F(x) = ', f(x)
+
+  def jacobian(f,x):
+    h = 1E-04
+    n = x.size
+    jac = np.zeros((n,n), dtype=np.float)
+    f0 = f(x)
+    for i in range(n):
+      temp = x[i]
+      x[i] = temp + h
+      f1 = f(x)
+      x[i] = temp
+      jac[:,i] = (f1 - f0)/h
+    return jac, f0
+
+  maxit = 30
+
+  for i in range(maxit):
+    jac, f0 = jacobian(f, x)
+    if np.linalg.norm(f0)/x.size < tol: break
+    dx = np.linalg.solve(jac, -f0)
+    x = x + dx    
+    if np.linalg.norm(dx) < tol * max(max(np.abs(x)),1): break      
+
+  if i < maxit:
+    print 'Final -----'
+    print 'x     = ', x
+    print 'F(x)  = ', f(x)
+    print 'niter = ', i + 1
+    return x
+  
+  raise Exception('Too many iterations')
+
 def bracket(f,x1,h):
      ''' a,b = bracket(f,xstart,h)
          Finds the brackets (a,b) of minimum point of the user-supplied scalar 
@@ -113,5 +150,18 @@ def __test_powell():
   xstart = np.array([3, 9])
   xmin, niter, msg = powell(F, xstart, verbose=True)  
 
+def __test_newton_raphson():
+  def F(x):
+    f = np.zeros(3, dtype=np.float)
+    f[0] = np.sin(x[0]) + x[1]**2 + np.log(x[2]) - 7.0
+    f[1] = 3.0*x[0] + 2.0*x[1] - x[2]**3 + 1.0
+    f[2] = x[0] + x[1] + x[2] - 5.0
+    return f
+
+  x = np.array([1.0, 1.0, 1.0])
+  print newton_raphson(F, x, verbose=True)
+
+
 if __name__ == '__main__':
-  __test_powell()
+  # __test_powell()
+  __test_newton_raphson()
